@@ -435,12 +435,16 @@ impl<'a, T> IntoIterator for &'a BlockWithTransactions<T> {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(bound(serialize = "T: SerializeContent"))]
 pub struct CommittedTransaction<T = Box<Transaction>> {
+    /// doc
     #[serde(serialize_with = "SerializeContent::serialize_content")]
-    content: T,
-    location: TxLocation,
-    location_proof: ListProof<Hash>,
+    pub content: T,
+    /// doc
+    pub location: TxLocation,
+    /// doc
+    pub location_proof: ListProof<Hash>,
+    /// doc
     #[serde(with = "TxStatus")]
-    status: TransactionResult,
+    pub status: TransactionResult,
 }
 
 /// Transaction execution status. Simplified version of `TransactionResult`.
