@@ -450,7 +450,7 @@ pub struct CommittedTransaction<T = Box<Transaction>> {
 /// Transaction execution status. Simplified version of `TransactionResult`.
 #[serde(tag = "type", rename_all = "kebab-case")]
 #[derive(Debug, Serialize, Deserialize)]
-enum TxStatus<'a> {
+pub enum TxStatus<'a> {
     Success,
     Panic { description: &'a str },
     Error { code: u8, description: &'a str },
