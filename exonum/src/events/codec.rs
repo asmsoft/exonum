@@ -101,8 +101,8 @@ impl Encoder for MessagesCodec {
     type Error = io::Error;
 
     fn encode(&mut self, msg: Self::Item, buf: &mut BytesMut) -> io::Result<()> {
-        let e = self.session.encrypt_msg(msg.as_ref(), buf)?;
-        trace!("Encoded: {:?}", e);
+        self.session.encrypt_msg(msg.as_ref(), buf)?;
+        trace!("Encoded: {:?}", buf);
         Ok(())
     }
 }
