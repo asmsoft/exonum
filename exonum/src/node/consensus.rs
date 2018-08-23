@@ -30,6 +30,7 @@ impl NodeHandler {
     /// Validates consensus message, then redirects it to the corresponding `handle_...` function.
     #[cfg_attr(feature = "flame_profile", flame)]
     pub fn handle_consensus(&mut self, msg: ConsensusMessage) {
+        trace!("Handle consensus: {:?}", msg);
         if !self.is_enabled {
             info!(
                 "Ignoring a consensus message {:?} because the node is disabled",
@@ -195,6 +196,7 @@ impl NodeHandler {
     // TODO write helper function which returns Result (ECR-123)
     #[cfg_attr(feature = "flame_profile", flame)]
     pub fn handle_block(&mut self, msg: &BlockResponse) {
+        trace!("Handle block: {:?}", msg);
         // Request are sent to us
         if msg.to() != self.state.consensus_public_key() {
             error!(
@@ -563,6 +565,7 @@ impl NodeHandler {
     /// added to the transactions pool.
     #[cfg_attr(feature = "flame_profile", flame)]
     pub fn handle_tx(&mut self, msg: RawTransaction) {
+        trace!("Handle tx: {:?}", msg);
         let tx = match self.blockchain.tx_from_raw(msg.clone()) {
             Ok(tx) => tx,
             Err(e) => {
@@ -586,6 +589,7 @@ impl NodeHandler {
     /// Handles raw transactions.
     #[cfg_attr(feature = "flame_profile", flame)]
     pub fn handle_txs_batch(&mut self, msg: &TransactionsResponse) {
+        trace!("Handle tx batch: {:?}", msg);
         if msg.to() != self.state.consensus_public_key() {
             error!(
                 "Received response intended for another peer, to={}, from={}",

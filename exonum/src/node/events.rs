@@ -39,6 +39,7 @@ impl NodeHandler {
     }
 
     fn handle_network_event(&mut self, event: NetworkEvent) {
+        trace!("Handle network event: {:?}", event);
         if !self.is_enabled {
             info!(
                 "Ignoring a network event {:?} because the node is disabled",

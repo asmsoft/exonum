@@ -30,6 +30,8 @@ impl NodeHandler {
         //         return;
         //     }
 
+        trace!("Before handle: {:?}", raw);
+
         match Any::from_raw(raw) {
             Ok(Any::Connect(msg)) => self.handle_connect(msg),
             Ok(Any::Status(msg)) => self.handle_status(&msg),
@@ -68,6 +70,7 @@ impl NodeHandler {
     /// Removes peer from the state and from the cache. Node will try to connect to that address
     /// again if it was in the validators list.
     fn remove_peer_with_addr(&mut self, addr: SocketAddr) {
+        trace!("Remove peer: {:?}", addr);
         let need_reconnect = self.state.remove_peer_with_addr(&addr);
         if need_reconnect {
             self.connect(&addr);
@@ -78,6 +81,7 @@ impl NodeHandler {
     /// Handles the `Connect` message and connects to a peer as result.
     pub fn handle_connect(&mut self, message: Connect) {
         // TODO add spam protection (ECR-170)
+        trace!("Handle connect: {:?}", message);
         let address = message.addr();
         if address == self.state.our_connect_message().addr() {
             trace!("Received Connect with same address as our external_address.");
@@ -138,6 +142,7 @@ impl NodeHandler {
     /// Handles the `Status` message. Node sends `BlockRequest` as response if height in the
     /// message is higher than node's height.
     pub fn handle_status(&mut self, msg: &Status) {
+        trace!("Handle status: {:?}", msg);
         let height = self.state.height();
         trace!(
             "HANDLE STATUS: current height = {}, msg height = {}",

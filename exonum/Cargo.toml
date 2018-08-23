@@ -46,6 +46,7 @@ tokio-io = "=0.1.6"
 tokio-retry = "=0.1.1"
 tokio-timer = "=0.1.2"
 failure = "=0.1.1"
+failure_derive = "=0.1.1"
 os_info = "1.0.1"
 chrono = { version = "=0.4.2", features = ["serde"] }
 bodyparser = "=0.8.0"

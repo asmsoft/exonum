@@ -25,6 +25,7 @@ use messages::{BlockRequest, BlockResponse, Message, PrevotesRequest, ProposeReq
 impl NodeHandler {
     /// Validates request, then redirects it to the corresponding `handle_...` function.
     pub fn handle_request(&mut self, msg: RequestMessage) {
+        trace!("Handle request: {:?}", msg);
         // Request are sent to us
         if msg.to() != self.state.consensus_public_key() {
             return;
