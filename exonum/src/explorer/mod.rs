@@ -451,9 +451,18 @@ pub struct CommittedTransaction<T = Box<Transaction>> {
 #[serde(tag = "type", rename_all = "kebab-case")]
 #[derive(Debug, Serialize, Deserialize)]
 pub enum TxStatus<'a> {
+    /// docs
     Success,
-    Panic { description: &'a str },
-    Error { code: u8, description: &'a str },
+    /// docs
+    Panic {
+        /// docs
+        description: &'a str },
+    /// docs
+    Error {
+        /// docs
+        code: u8,
+        /// docs
+        description: &'a str },
 }
 
 impl<'a> TxStatus<'a> {

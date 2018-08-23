@@ -259,6 +259,7 @@ impl Any {
         } else {
             Any::Transaction(raw)
         };
+        trace!("{:?}", msg);
         Ok(msg)
     }
 }
