@@ -45,8 +45,10 @@ impl Decoder for MessagesCodec {
     type Error = io::Error;
 
     fn decode(&mut self, buf: &mut BytesMut) -> Result<Option<Self::Item>, io::Error> {
+        trace!("Start decode {:?}", buf);
         // Read header
         if buf.len() < HEADER_LENGTH {
+            trace!("None: buf.len() [{:?}] < HEADER_LENGTH [{:?}]", buf.len(), HEADER_LENGTH);
             return Ok(None);
         }
 
@@ -54,6 +56,7 @@ impl Decoder for MessagesCodec {
 
         // To fix some weird `decode()` behavior https://github.com/carllerche/bytes/issues/104
         if buf.len() < len + NOISE_HEADER_LENGTH {
+            trace!("None: buf.len() [{:?}] < len + NOISE_HEADER_LENGTH [{:?}]", buf.len(), len + NOISE_HEADER_LENGTH );
             return Ok(None);
         }
 
@@ -87,6 +90,8 @@ impl Decoder for MessagesCodec {
             let raw = RawMessage::new(MessageBuffer::from_vec(data));
             return Ok(Some(raw));
         }
+
+        trace!("None: buf.len() [{:?}] >= total_len [{:?}]", buf.len(), total_len);
         Ok(None)
     }
 }
@@ -96,7 +101,8 @@ impl Encoder for MessagesCodec {
     type Error = io::Error;
 
     fn encode(&mut self, msg: Self::Item, buf: &mut BytesMut) -> io::Result<()> {
-        self.session.encrypt_msg(msg.as_ref(), buf)?;
+        let e = self.session.encrypt_msg(msg.as_ref(), buf)?;
+        trace!("Encoded: {:?}", e);
         Ok(())
     }
 }
