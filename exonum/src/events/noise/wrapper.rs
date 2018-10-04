@@ -19,6 +19,7 @@ use snow::{NoiseBuilder, Session};
 use std::fmt;
 use std::fmt::{Error, Formatter};
 use std::io;
+use std::panic::{catch_unwind, AssertUnwindSafe};
 
 use events::noise::HandshakeParams;
 
@@ -61,7 +62,15 @@ impl NoiseWrapper {
     }
 
     pub fn read_handshake_msg(&mut self, input: &[u8]) -> Result<(usize, Vec<u8>), NoiseError> {
-        self.read(input, NOISE_MAX_MESSAGE_LENGTH)
+        let catch_result = catch_unwind(AssertUnwindSafe(|| {
+            self.read(input, NOISE_MAX_MESSAGE_LENGTH)
+        }));
+        match catch_result {
+            Ok(result) => result,
+            Err(_) => Err(NoiseError::new(format!(
+                "Error while writing noise message"
+            ))),
+        }
     }
 
     pub fn write_handshake_msg(&mut self) -> Result<(usize, Vec<u8>), NoiseError> {
