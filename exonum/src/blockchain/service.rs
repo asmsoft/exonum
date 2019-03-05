@@ -305,8 +305,8 @@ impl ServiceContext {
 
     /// Returns a reference to the transaction sender, which can then be used
     /// to broadcast a transaction to other nodes in the network.
-    pub fn transaction_sender(&self) -> &TransactionSend {
-        &self.api_sender
+    pub fn transaction_sender(&self) -> Box<dyn TransactionSend> {
+        Box::new(self.api_sender.clone())
     }
 
     /// Returns the actual blockchain global configuration.
